@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡ALTO CUMPLE DE AGUS!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos re bizarros y 2000s */
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap');
+
+        body {
+            font-family: 'Comic Sans MS', 'Comic Neue', cursive, sans-serif;
+            background-color: #ff00ff;
+            background-image: 
+                linear-gradient(45deg, #00ffff 25%, transparent 25%, transparent 75%, #00ffff 75%, #00ffff),
+                linear-gradient(45deg, #00ffff 25%, transparent 25%, transparent 75%, #00ffff 75%, #00ffff);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: #000;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            animation: bgScroll 10s linear infinite;
+        }
+
+        @keyframes bgScroll {
+            100% { background-position: 40px 40px, 60px 60px; }
+        }
+
+        .container-bizarro {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #ffff00;
+            border: 8px ridge #ff0000;
+            padding: 20px;
+            box-shadow: 10px 10px 0px #0000ff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            color: #ff0000;
+            text-shadow: 3px 3px 0 #ffff00, 6px 6px 0 #0000ff;
+            animation: titila 0.5s infinite alternate;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        @keyframes titila {
+            0% { color: #ff0000; text-shadow: 3px 3px 0 #ffff00, 6px 6px 0 #0000ff; transform: scale(1); }
+            100% { color: #00ff00; text-shadow: -3px -3px 0 #ff00ff, -6px -6px 0 #00ffff; transform: scale(1.05); }
+        }
+
+        marquee {
+            background-color: #000;
+            color: #00ff00;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 5px;
+            border-top: 3px solid #ff00ff;
+            border-bottom: 3px solid #ff00ff;
+            text-transform: uppercase;
+        }
+
+        .media-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap; 
+            margin: 20px 0;
+        }
+
+        .audio-container {
+            background: #00ff00;
+            padding: 15px;
+            border: 3px solid #000;
+            box-shadow: 5px 5px 0 #000;
+        }
+
+        .foto-container {
+            border: 10px groove #00ffff;
+            background: #fff;
+            padding: 10px;
+            transform: rotate(-3deg);
+            transition: transform 0.3s;
+        }
+        
+        .foto-container:hover {
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        #foto-principal {
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            border: 2px solid #000;
+            display: block;
+        }
+
+        .info-box {
+            background-color: #ff00ff;
+            color: #fff;
+            padding: 15px;
+            border: 4px dashed #00ffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            box-shadow: inset 0 0 15px #000;
+        }
+
+        .info-box span {
+            color: #ffff00;
+            font-size: 1.5rem;
+            display: block;
+            margin-top: 10px;
+            animation: shake 2s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .form-container {
+            background: #0000ff;
+            color: #fff;
+            padding: 20px;
+            border: 5px solid #00ff00;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 80%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 3px solid #ff00ff;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-family: inherit;
+            color: #000; 
+            background-color: #fff; 
+            font-weight: bold;
+        }
+
+        input[type="text"]:focus {
+            outline: 3px dashed #ffff00;
+        }
+
+        button {
+            background-color: #ff0000;
+            color: #ffff00;
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: 4px outset #ffaaaa;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: inherit;
+        }
+
+        button:active {
+            border-style: inset;
+            transform: translateY(2px);
+        }
+
+        button:hover {
+            background-color: #cc0000;
+        }
+
+        .lista-invitados {
+            background: #fff;
+            border: 5px double #ff00ff;
+            padding: 15px;
+            text-align: left;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .lista-invitados h3 {
+            color: #0000ff;
+            text-align: center;
+            font-size: 1.8rem;
+            text-decoration: underline;
+            margin-top: 0;
+        }
+
+        .invitado-item {
+            font-size: 1.2rem;
+            border-bottom: 1px dashed #ccc;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .invitado-item::before {
+            content: '🍺';
+            margin-right: 10px;
+        }
+
+        #msg-box {
+            display: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            border: 2px solid #000;
+        }
+        .msg-error { background-color: #ffaaaa; color: #cc0000; }
+        .msg-success { background-color: #aaffaa; color: #006600; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .container-bizarro { margin: 10px; border-width: 4px; padding: 10px; }
+            input[type="text"] { width: 95%; }
+            .media-wrapper { gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <marquee scrollamount="15">🍻 ¡TODO PLATANOS! 🍻 SÁBADO 7 DE NOVIEMBRE 🍻 VENITE 🍻 ¡TRAÉ PARA TOMAR! 🍻 NO SEAS ORTIVA 🍻</marquee>
+
+    <div class="container-bizarro">
+        
+        <h1>¡MI CUMPLEAÑITOS FELIZ!</h1>
+
+        <div class="media-wrapper">
+            <div class="audio-container">
+                <p style="margin-top:0; font-weight:bold; font-size:14px; color:#000;">🎵 DALE PLAY 🎵</p>
+                <audio controls loop id="musica-fondo">
+                    <source src="sonido/Mix REGGAETON VIEJO (Old School) Daddy Yankee, Plan B, Don Omar, Calle 13, Y MÁS Dj RuLoX - Dj RuLoX (128k) .mp3" type="audio/mpeg">
+                    Tu navegador es muy viejo y no banca el audio.
+                </audio>
+            </div>
+
+            <div class="foto-container">
+                <img id="foto-principal" src="imagenes/WhatsApp Image 2026-11-01 at 5.28.01 PM.jpeg" alt="Agus re loco con tul azul">
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p>Sábado 7 de Noviembre desde el mediodia en Calle 48 Nº5653, Plátanos.</p>
+            <p>Hasta que alguno se ahogue en la pileta (18:00 hs)</p>
+            <span>¡Traigan para tomar sino toman agua de la zanja! 🍻🧉🥂</span>
+        </div>
+
+        <div class="form-container">
+            <h2>¿Venís o te achicás?</h2>
+            <p>Anotate sino te quedas sin comer.</p>
+            
+            <div id="msg-box"></div>
+
+            <form id="rsvp-form">
+                <input type="text" id="nombre-input" placeholder="Tu nombre o apodo..." required maxlength="30"><br>
+                <button type="submit" id="submit-btn">¡Voy de una!</button>
+            </form>
+        </div>
+
+        <div class="lista-invitados">
+            <h3>LOS QUE SE LA BANCAN</h3>
+            <div id="lista-cargando" style="text-align: center; color: #ff00ff; font-weight: bold;">Conectando a la base de datos...</div>
+            <div id="guests-list">
+                <!-- Aca se inyectan los invitados con JS -->
+            </div>
+        </div>
+
+    </div>
+
+    <marquee scrollamount="20" direction="right">🎉 DALE DALE DALE 🎉 SE PICA EN PLATANOS 🎉 CUMPLE FELIZ 🎉</marquee>
+
+    <!-- SCRIPTS FIREBASE (YA CONFIGURADO CON TUS DATOS) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyALF54w1RrnnI2UggTdMRPc_wUBTHaLKn4",
+            authDomain: "invitados-a4d3b.firebaseapp.com",
+            projectId: "invitados-a4d3b",
+            storageBucket: "invitados-a4d3b.firebasestorage.app",
+            messagingSenderId: "240670895344",
+            appId: "1:240670895344:web:800a5daffb6021e3bd6635",
+            measurementId: "G-BRV4KKFK7H"
+        };
+
+        let app, db, guestsRef;
+        let isFirebaseActive = false;
+
+        const form = document.getElementById('rsvp-form');
+        const nombreInput = document.getElementById('nombre-input');
+        const guestsListDiv = document.getElementById('guests-list');
+        const msgBox = document.getElementById('msg-box');
+        const loadingMsg = document.getElementById('lista-cargando');
+        const submitBtn = document.getElementById('submit-btn');
+
+        function showMessage(msg, type) {
+            msgBox.textContent = msg;
+            msgBox.className = type === 'error' ? 'msg-error' : 'msg-success';
+            msgBox.style.display = 'block';
+            setTimeout(() => { msgBox.style.display = 'none'; }, 4000);
+        }
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            guestsRef = collection(db, 'invitados_cumple');
+            isFirebaseActive = true;
+            
+            const q = query(guestsRef, orderBy("timestamp", "asc"));
+            onSnapshot(q, (snapshot) => {
+                loadingMsg.style.display = 'none';
+                guestsListDiv.innerHTML = '';
+                if (snapshot.empty) {
+                    guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">Nadie confirmó todavía. ¡Sé el primero, cagón!</p>';
+                    return;
+                }
+                snapshot.forEach(doc => {
+                    const guest = doc.data();
+                    const div = document.createElement('div');
+                    div.className = 'invitado-item';
+                    div.textContent = guest.nombre.toUpperCase();
+                    guestsListDiv.appendChild(div);
+                });
+            }, (error) => {
+                console.error("Error leyendo Firestore:", error);
+                loadingMsg.textContent = "Error al cargar la lista. ¿Activaste la database en Test Mode?";
+            });
+            
+        } catch (e) {
+            console.error("Firebase falló:", e);
+            loadingMsg.style.display = 'none';
+            guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">No se pudo conectar a la base de datos.</p>';
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nombre = nombreInput.value.trim();
+            
+            if (!nombre) {
+                showMessage("¡Poné tu nombre, fantasma!", "error");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Anotando...';
+
+            if (isFirebaseActive) {
+                try {
+                    await addDoc(guestsRef, {
+                        nombre: nombre,
+                        timestamp: Date.now()
+                    });
+                    showMessage("¡Listo! Ya estás en la lista. ¡No faltes!", "success");
+                    nombreInput.value = '';
+                } catch (error) {
+                    console.error("Error al guardar en Firebase:", error);
+                    showMessage("Fallo al anotar, capaz la base de datos no está en Test Mode.", "error");
+                }
+            } else {
+                showMessage("La base de datos está desconectada.", "error");
+            }
+
+            submitBtn.disabled = false;
+            submitBtn.textContent = '¡Voy de una!';
+        });
+    </script>
+</body>
+</html>
