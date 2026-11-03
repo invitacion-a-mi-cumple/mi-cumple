@@ -275,100 +275,107 @@
     <marquee scrollamount="20" direction="right">🎉 DALE DALE DALE 🎉 SE PICA EN PLATANOS 🎉 CUMPLE FELIZ 🎉</marquee>
 
     <!-- SCRIPTS FIREBASE (YA CONFIGURADO CON TUS DATOS) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    <!-- SCRIPTS FIREBASE (VERSIÓN BLINDADA) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyALF54w1RrnnI2UggTdMRPc_wUBTHaLKn4",
-            authDomain: "invitados-a4d3b.firebaseapp.com",
-            projectId: "invitados-a4d3b",
-            storageBucket: "invitados-a4d3b.firebasestorage.app",
-            messagingSenderId: "240670895344",
-            appId: "1:240670895344:web:800a5daffb6021e3bd6635",
-            measurementId: "G-BRV4KKFK7H"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyALF54w1RrnnI2UggTdMRPc_wUBTHaLKn4",
+        authDomain: "invitados-a4d3b.firebaseapp.com",
+        projectId: "invitados-a4d3b",
+        storageBucket: "invitados-a4d3b.firebasestorage.app",
+        messagingSenderId: "240670895344",
+        appId: "1:240670895344:web:800a5daffb6021e3bd6635",
+        measurementId: "G-BRV4KKFK7H"
+    };
 
-        let app, db, guestsRef;
-        let isFirebaseActive = false;
+    let app, db, guestsRef;
 
-        const form = document.getElementById('rsvp-form');
-        const nombreInput = document.getElementById('nombre-input');
-        const guestsListDiv = document.getElementById('guests-list');
-        const msgBox = document.getElementById('msg-box');
-        const loadingMsg = document.getElementById('lista-cargando');
-        const submitBtn = document.getElementById('submit-btn');
+    const form = document.getElementById('rsvp-form');
+    const nombreInput = document.getElementById('nombre-input');
+    const guestsListDiv = document.getElementById('guests-list');
+    const msgBox = document.getElementById('msg-box');
+    const loadingMsg = document.getElementById('lista-cargando');
+    const submitBtn = document.getElementById('submit-btn');
 
-        function showMessage(msg, type) {
-            msgBox.textContent = msg;
-            msgBox.className = type === 'error' ? 'msg-error' : 'msg-success';
-            msgBox.style.display = 'block';
-            setTimeout(() => { msgBox.style.display = 'none'; }, 4000);
-        }
+    function showMessage(msg, type) {
+        msgBox.textContent = msg;
+        msgBox.className = type === 'error' ? 'msg-error' : 'msg-success';
+        msgBox.style.display = 'block';
+        setTimeout(() => { msgBox.style.display = 'none'; }, 4000);
+    }
 
-        try {
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            guestsRef = collection(db, 'invitados_cumple');
-            isFirebaseActive = true;
+    try {
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        guestsRef = collection(db, 'invitados_cumple');
+        
+        // Escuchamos la colección directamente sin queries complejas
+        onSnapshot(guestsRef, (snapshot) => {
+            loadingMsg.style.display = 'none';
+            guestsListDiv.innerHTML = '';
             
-            const q = query(guestsRef, orderBy("timestamp", "asc"));
-            onSnapshot(q, (snapshot) => {
-                loadingMsg.style.display = 'none';
-                guestsListDiv.innerHTML = '';
-                if (snapshot.empty) {
-                    guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">Nadie confirmó todavía. ¡Sé el primero, cagón!</p>';
-                    return;
-                }
-                snapshot.forEach(doc => {
-                    const guest = doc.data();
+            if (snapshot.empty) {
+                guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">Nadie confirmó todavía. ¡Sé el primero, cagón!</p>';
+                return;
+            }
+
+            const invitados = [];
+            snapshot.forEach(doc => {
+                invitados.push(doc.data());
+            });
+
+            // Ordenamos por timestamp si existe
+            invitados.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+
+            invitados.forEach(guest => {
+                if (guest.nombre) {
                     const div = document.createElement('div');
                     div.className = 'invitado-item';
                     div.textContent = guest.nombre.toUpperCase();
                     guestsListDiv.appendChild(div);
-                });
-            }, (error) => {
-                console.error("Error leyendo Firestore:", error);
-                loadingMsg.textContent = "Error al cargar la lista. ¿Activaste la database en Test Mode?";
+                }
             });
-            
-        } catch (e) {
-            console.error("Firebase falló:", e);
-            loadingMsg.style.display = 'none';
-            guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">No se pudo conectar a la base de datos.</p>';
+        }, (error) => {
+            console.error("Error leyendo Firestore:", error);
+            loadingMsg.textContent = "Error al cargar la lista. Revisá las reglas de Firebase.";
+        });
+        
+    } catch (e) {
+        console.error("Firebase falló:", e);
+        loadingMsg.style.display = 'none';
+        guestsListDiv.innerHTML = '<p style="color:#888; font-style:italic;">No se pudo conectar a la base de datos.</p>';
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nombre = nombreInput.value.trim();
+        
+        if (!nombre) {
+            showMessage("¡Poné tu nombre, fantasma!", "error");
+            return;
         }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nombre = nombreInput.value.trim();
-            
-            if (!nombre) {
-                showMessage("¡Poné tu nombre, fantasma!", "error");
-                return;
-            }
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Anotando...';
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Anotando...';
+        try {
+            await addDoc(guestsRef, {
+                nombre: nombre,
+                timestamp: Date.now()
+            });
+            showMessage("¡Listo! Ya estás en la lista. ¡No faltes!", "success");
+            nombreInput.value = '';
+        } catch (error) {
+            console.error("Error al guardar en Firebase:", error);
+            showMessage("Fallo al anotar, probá de nuevo.", "error");
+        }
 
-            if (isFirebaseActive) {
-                try {
-                    await addDoc(guestsRef, {
-                        nombre: nombre,
-                        timestamp: Date.now()
-                    });
-                    showMessage("¡Listo! Ya estás en la lista. ¡No faltes!", "success");
-                    nombreInput.value = '';
-                } catch (error) {
-                    console.error("Error al guardar en Firebase:", error);
-                    showMessage("Fallo al anotar, capaz la base de datos no está en Test Mode.", "error");
-                }
-            } else {
-                showMessage("La base de datos está desconectada.", "error");
-            }
-
-            submitBtn.disabled = false;
-            submitBtn.textContent = '¡Voy de una!';
-        });
-    </script>
+        submitBtn.disabled = false;
+        submitBtn.textContent = '¡Voy de una!';
+    });
+        </script>
+    
 </body>
 </html>
